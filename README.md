@@ -17,7 +17,9 @@ Mapping report
 
 Validation
 
-I would not screenshot pages. Instead, the program will access the PDF's embedded image objects directly and extract their available image streams. This preserves the embedded image data rather than introducing screenshot compression or scaling.And the mapping report would establish that image_003.jpg is the same extracted image as image_001.jpg, while image_005.jpg corresponds to image_002.png. For implementation, I would use a PDF-processing library capable of accessing embedded image streams, rather than converting PDF pages to images.
+I would not screenshot pages. Instead, the program will access the PDF's embedded image objects directly and extract their available image streams. This preserves the embedded image data rather than introducing screenshot compression or scaling.
+
+And the mapping report would establish that image_2.jpg is the same extracted image as image_1.jpg, while image_3.jpg corresponds to image_002.png. For implementation, I would use a PDF-processing library capable of accessing embedded image streams, rather than converting PDF pages to images.
 
 #	Subtask	Work	Estimate
 
