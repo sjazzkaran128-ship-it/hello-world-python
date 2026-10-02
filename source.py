@@ -1,164 +1,72 @@
+
 import pymupdf
 import hashlib
 import os
 import csv
-pdf_path = "C:/Users/sjazz/Downloads/identical duplicate.pdf"
+import imagehash
+from PIL import Image
+from io import BytesIO
+pdf_path = r"C:\Users\sjazz\Downloads\identical duplicate.pdf"
 pdf = pymupdf.open(pdf_path)
-
-print("PDF opened successfully!")
-print("Number of pages:", len(pdf))
-
-
-# --------------------------------
-# 2. Create output folder
-# --------------------------------
-
-os.makedirs("images", exist_ok=True)
-
-
-# --------------------------------
-# 3. Store hashes
-# --------------------------------
-
-seen = set()
-
+os.makedirs("identical_images", exist_ok=True)
+os.makedirs("duplicate_images", exist_ok=True)
+seen_hashes = set()
+seen_phashes = []
 report = []
-
 image_number = 1
-
-
-# --------------------------------
-# 4. Read every page
-# --------------------------------
-
 for page_number, page in enumerate(pdf, start=1):
-
     print("Checking page:", page_number)
-
     images = page.get_images()
-
     for image in images:
-
-        # Get image ID
         xref = image[0]
-
-        # Extract image
         data = pdf.extract_image(xref)
-
         image_bytes = data["image"]
-
         extension = data["ext"]
-
-
-        # --------------------------------
-        # 5. Create hash
-        # --------------------------------
-
-        image_hash = hashlib.sha256(
+        sha_hash = hashlib.sha256(
             image_bytes
         ).hexdigest()
-
-
-        # --------------------------------
-        # 6. Check duplicate
-        # --------------------------------
-
-        if image_hash in seen:
-
-            status = "Duplicate"
-
-            print("Duplicate image found!")
-
+        img = Image.open(BytesIO(image_bytes))
+        phash = imagehash.phash(img)
+        filename = f"image_{image_number}.{extension}"
+        status = ""
+        folder = ""
+        if sha_hash in seen_hashes:
+            status = "Identical"
+            folder = "identical_images"
+            print("Identical image found!")
         else:
-
-            status = "Unique"
-
-            print("Unique image found!")
-
-            # Remember hash
-            seen.add(image_hash)
-
-
-            # --------------------------------
-            # 7. Save image
-            # --------------------------------
-
-            filename = (
-                f"image_{image_number}.{extension}"
-            )
-
-            image_path = os.path.join(
-                "images",
-                filename
-            )
-
-            with open(
-                image_path,
-                "wb"
-            ) as file:
-
-                file.write(image_bytes)
-
-            image_number += 1
-
-
-        # --------------------------------
-        # 8. Add to report
-        # --------------------------------
-
-        report.append([
-            page_number,
-            extension,
-            image_hash,
-            status
-        ])
-
-
-# Close PDF
+            duplicate_found = False
+            for old_hash in seen_phashes:
+                difference = phash - old_hash
+                if difference <= 5:
+                    duplicate_found = True
+                    break
+            if duplicate_found:
+                status = "Duplicate"
+                folder = "duplicate_images"
+                print("Visual duplicate found!")
+            seen_hashes.add(sha_hash)
+            seen_phashes.append(phash)
+        image_path = os.path.join(folder,filename)
+        with open(image_path, "wb") as file:
+            file.write(image_bytes)
+        report.append([page_number,filename,extension,sha_hash,str(phash),status,folder])
+        image_number += 1
 pdf.close()
-
-
-# --------------------------------
-# 9. Create CSV report
-# --------------------------------
-
-with open(
-    "mapping_report.csv",
-    "w",
-    newline="",
-    encoding="utf-8"
-) as file:
-
+report_path = os.path.join(os.getcwd(), "mapping_report_new1.csv")
+with open(report_path, "w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
-
-    writer.writerow([
-        "Page",
-        "Format",
-        "Hash",
-        "Status"
-    ])
-
+    writer.writerow(["Page", "Image Name", "Format", "SHA256","Perceptual Hash", "Status", "Saved Folder"])
     writer.writerows(report)
-
-
-# --------------------------------
-# 10. Final result
-# --------------------------------
-
-print()
-print("================================")
-print("Extraction Completed!")
-print("================================")
-
-print("Unique images:", len(seen))
-
-print(
-    "Duplicate images:",
-    len(report) - len(seen)
+print("Report saved at:", report_path)
+identical_count = sum(
+    1 for row in report if row[5] == "Identical"
 )
-
-print("Images saved in: images")
-
-print(
-    "Report saved as: mapping_report.csv"
+duplicate_count = sum(
+    1 for row in report if row[5] == "Duplicate"
 )
+print("Total images:", len(report))
+print("Identical images:", identical_count)
+print("Visual duplicates:", duplicate_count)
+print("\nImages saved in separate folders.")
+print("Mapping report: mapping_report_new1.csv")
