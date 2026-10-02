@@ -1,21 +1,21 @@
 # How I would achieve the task ??
 The workflow would be:
 
-PDF 
+PDF:- First of all we choose the pdf from the web browser
 
-Embedded-image extraction 
+Embedded-image extraction: After we will do the image extraction of identical as well as duplicate images with the help of pymupdf library of python which is used to extract image from each page of the pdf
 
-Image metadata 
+Image metadata- After that the image metadata of both the extracted images are being compared in order to perform hashing . In this meta data there is very several useful information regarding the images , ie about the page number of image, the size of the image, the resolution and quality of the image,and weather the image is identical or duplicate
 
-Hashing 
+Hashing- Hashing is used to identify the identical and duplicate images. it is a powerful tool to pick up the identical images and from the duplicate. In these program we make use of sha 256hash and perceptual hash . sha 256 is used for identifying the identical and duplicate images while perceptual hash is used to seperate identical from duplicate. During the hashing it is important to note the hash period in order to facilitate image grouping
 
-Duplicate grouping
+Duplicate grouping: In this there is grouping of all the duplicate images in a seperate folder so that if coudn't be mix up with the identical images as there is a mere difference b/w the identical and duplicate images. Seperate all the duplicate images in another folder
 
-Unique-image folder 
+Identical-image folder Now left the part of unique images. Make a another folder and put all the identical images there
 
-Mapping report  
+Mapping report- the mapping report will give you the list of all the duplicate and identical images along with their status and the folder in which they are saved . the reports is in the form of csv file in which all the data is saved in terms of spreadsheets  
 
-Validation
+Validation : The last step is to check weather the process is being performed successfully or not
 
 I would not screenshot pages. Instead, the program will access the PDF's embedded image objects directly and extract their available image streams. This preserves the embedded image data rather than introducing screenshot compression or scaling.
 
