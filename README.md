@@ -43,3 +43,12 @@ And the mapping report would establish that image_2.jpg is the same extracted im
 
 10	Documentation-	README, execution instructions and output explanation
 
+# Challenges Faced During Extraction of 1000s of identical duplicate images
+
+1 Python program may become slow to run as many images and perceptual hashes may be kept in the memory during processing
+2 Visually identical images may be classified as different bcs sha 256 detects identical images
+3 The script may extract and save the same image repeatedly as pymupdf lib can may reuse the same image on several pages
+4 The disc usage increases and the output folder becomes difficult to manage as saving each occurence can create thousands of file
+5 Files may overwrite themselves or script may fail as giving simple names of images may already exist from previous run
+6 yThe script may fail due to the permission error or produce an incomplete report due to large reports take longer to write content
+7 It leads to unclear duplicate grouping as it becomes difficult to trace an image back to its source page
