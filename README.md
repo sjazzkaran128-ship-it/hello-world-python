@@ -62,13 +62,13 @@ And the mapping report would establish that image_2.jpg is the same extracted im
 How to improve the method
 
 - For exact duplicates: Use SHA-256 hashes stored in a dictionary, so each new image can be checked quickly.
-- 
+  
 - For visual duplicates: Use perceptual hashing, but avoid comparing every image against every other image for very large collections. Consider grouping hashes or using a similarity-search structure.
-- 
+  
 - For memory management: Process images one at a time and retain only the hashes and required metadata, rather than keeping all full image data in memory.
-- 
+  
 - For safe output: Use unique filenames, separate output folders, and a dedicated report directory.
-- 
+  
 - For traceability: Include the source page, image reference, hash, classification, and matched image filename in the CSV report.
-- 
+  
 - For reliability: Add exception handling and log failed extractions so one problematic image does not stop the entire process.
