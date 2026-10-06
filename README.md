@@ -43,7 +43,7 @@ And the mapping report would establish that image_2.jpg is the same extracted im
 
 10	Documentation-	README, execution instructions and output explanation
 
-# Challenges Faced During Extraction of 1000s of identical duplicate images
+# Challenges Faced During Extraction of 100s and 1000s of identical duplicate images
 
 1 Python program may become slow to run as many images and perceptual hashes may be kept in the memory during processing
 
