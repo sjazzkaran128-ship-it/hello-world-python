@@ -59,7 +59,7 @@ And the mapping report would establish that image_2.jpg is the same extracted im
 
 7 It leads to unclear duplicate grouping as it becomes difficult to trace an image back to its source page
 
-How to improve the method
+# How to improve the method
 
 - For exact duplicates: Use SHA-256 hashes stored in a dictionary, so each new image can be checked quickly.
   
