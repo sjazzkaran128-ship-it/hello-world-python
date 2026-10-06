@@ -58,3 +58,17 @@ And the mapping report would establish that image_2.jpg is the same extracted im
 6 yThe script may fail due to the permission error or produce an incomplete report due to large reports take longer to write content
 
 7 It leads to unclear duplicate grouping as it becomes difficult to trace an image back to its source page
+
+How to improve the method
+
+- For exact duplicates: Use SHA-256 hashes stored in a dictionary, so each new image can be checked quickly.
+- 
+- For visual duplicates: Use perceptual hashing, but avoid comparing every image against every other image for very large collections. Consider grouping hashes or using a similarity-search structure.
+- 
+- For memory management: Process images one at a time and retain only the hashes and required metadata, rather than keeping all full image data in memory.
+- 
+- For safe output: Use unique filenames, separate output folders, and a dedicated report directory.
+- 
+- For traceability: Include the source page, image reference, hash, classification, and matched image filename in the CSV report.
+- 
+- For reliability: Add exception handling and log failed extractions so one problematic image does not stop the entire process.
